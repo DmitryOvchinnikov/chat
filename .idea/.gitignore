@@ -68,6 +68,8 @@ builds/**/images/*
 **/tmp/*
 
 # Don't include our binary
+ch
+trace
 chat
 images/**
 
