@@ -50,7 +50,7 @@ func main() {
 		github.New("4d16d8899e2b252fca77", "1527f0e056e2eb0f5c7df885a4e2ddc79e80e817", "http://localhost:8080/auth/callback/github"),
 	)
 
-	r := newRoom()
+	r := newRoom(UseGravatar)
 
 	r.tracer = trace.New(os.Stdout)
 
