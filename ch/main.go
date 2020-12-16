@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"github.com/dmitryovchinnikov/chat/trace"
+	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/providers/github"
 	"html/template"
 	"log"
 	"net/http"
@@ -31,11 +33,17 @@ func main() {
 	var addr = flag.String("addr", ":8080", "The addr of the application.")
 	flag.Parse()
 
+	// setup gomniauth
+	gomniauth.SetSecurityKey("****************************************")
+	gomniauth.WithProviders(
+		github.New("********************", "****************************************", "http://localhost:8080/auth/callback/github"),
+	)
+
 	r := newRoom()
 
 	r.tracer = trace.New(os.Stdout)
 
-	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
+	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/auth/", loginHandler)
 	http.Handle("/room", r)
