@@ -21,6 +21,19 @@ type Avatar interface {
 	GetAvatarURL(ChatUser) (string, error)
 }
 
+type TryAvatar []Avatar
+
+func (a TryAvatar) GetAvatarURL(u ChatUser) (string, error) {
+
+	for _, avatar := range a {
+		if url, err := avatar.GetAvatarURL(u); err == nil {
+			return url, nil
+		}
+	}
+
+	return "", ErrNoAvatarURL
+}
+
 type FileSystemAvatar struct{}
 
 var UseFileSystemAvatar FileSystemAvatar
