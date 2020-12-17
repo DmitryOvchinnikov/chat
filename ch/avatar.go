@@ -18,7 +18,7 @@ type Avatar interface {
 	GetAvatarURL(c *client) (string, error)
 }
 
-type AuthAvatar struct {}
+type AuthAvatar struct{}
 
 var UseAuthAvatar AuthAvatar
 
@@ -32,7 +32,7 @@ func (AuthAvatar) GetAvatarURL(c *client) (string, error) {
 	return "", ErrNoAvatarURL
 }
 
-type GravatarAvatar struct {}
+type GravatarAvatar struct{}
 
 var UseGravatar GravatarAvatar
 
@@ -40,6 +40,20 @@ func (GravatarAvatar) GetAvatarURL(c *client) (string, error) {
 	if userID, ok := c.userData["userid"]; ok {
 		if userIDStr, ok := userID.(string); ok {
 			return "//www.gravatar.com/avatar/" + userIDStr, nil
+		}
+	}
+
+	return "", ErrNoAvatarURL
+}
+
+type FileSystemAvatar struct{}
+
+var UseFileSystemAvatar FileSystemAvatar
+
+func (FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
+	if userID, ok := c.userData["userid"]; ok {
+		if userIDStr, ok := userID.(string); ok {
+			return "/avatars/" + userIDStr + ".jpg", nil
 		}
 	}
 
